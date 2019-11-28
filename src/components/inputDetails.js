@@ -14,7 +14,31 @@ export class inputDetails extends Component {
             premuim: 1000,
             age: 0,
             disabled: false,
-            searchDisease:[]
+            searchDisease:[],
+            apiDisease:[ {
+                "category": "office syndrome",
+                "symtom": "Gastric"
+              },
+              {
+                "category": "office syndrome",
+                "symtom": "Herniated disc"
+              },
+              {
+                "category": "office syndrome",
+                "symtom": "Fever"
+              },
+              {
+                "category": "office syndrome",
+                "symtom": "Sinus"
+              },
+              {
+                "category": "critical disease",
+                "symtom": "Cysts"
+              },
+              {
+                "category": "critical disease",
+                "symtom": "Stroke"
+              }]
         };
         this.searchData = this.searchData.bind(this)
         this.handleInput = this.handleInput.bind(this)
@@ -22,14 +46,25 @@ export class inputDetails extends Component {
 
     searchData() {
         this.setState({ disabled: true })
-        console.log("mint")
     }
 
     handleInput = (event) =>{
+        const filterValues = (name) => {
+            return this.state.apiDisease.filter(data => {
+                return data.symtom.toLowerCase().indexOf(name.toLowerCase()) > -1;
+            });
+        }
 
+        console.log(filterValues(event.target.value))
+        this.setState({searchDisease: filterValues(event.target.value)})
+        
     }
 
     render() {
+        console.log(this.state.searchDisease)
+        const items = this.state.searchDisease.map((item, key) =>
+        <div key={item.id}>{item.symtom}</div>
+        )
         return (
             <div className="container">
                 <div className="input-data">
@@ -60,7 +95,7 @@ export class inputDetails extends Component {
                             onChange={this.handleInput}
                         />
                     </div>
-
+                    {items}
                     <button className="btn-search" onClick={() => this.searchData()}>Search</button>
 
                 </div>
