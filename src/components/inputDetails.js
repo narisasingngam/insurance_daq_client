@@ -55,15 +55,19 @@ export class inputDetails extends Component {
             });
         }
 
-        console.log(filterValues(event.target.value))
-        this.setState({searchDisease: filterValues(event.target.value)})
+        if(event.target.value === "" ){
+            this.setState({searchDisease: []})
+        }else{
+            this.setState({searchDisease: filterValues(event.target.value)})
+        }    
+
         
     }
 
     render() {
         console.log(this.state.searchDisease)
         const items = this.state.searchDisease.map((item, key) =>
-        <div key={item.id}>{item.symtom}</div>
+        <button className="disease-btn" key={item.id}>{item.symtom}</button>
         )
         return (
             <div className="container">

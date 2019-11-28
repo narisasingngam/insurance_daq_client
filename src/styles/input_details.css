@@ -51,6 +51,28 @@ border: 1px solid coral !important;
     margin-top: 10px;
 }
 
+.disease-btn{
+    width: 173px;
+    color: coral;
+    border-color: lightgray !important;
+    background-color: white !important;
+    overflow: hidden;
+    -webkit-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    padding: 5px 5px 5px 5px;
+    display: flex;
+    font-size: 15px;
+  }
+  
+  .disease-btn:hover{
+    background: coral !important;
+    border-color: coral !important;
+    color: white;
+    /* -webkit-box-shadow: 0px 0px 5px black; */
+    /* box-shadow: 0px 0px 5px black; */
+  }
+
 /* .third-level-menu
 {
     position: absolute;
