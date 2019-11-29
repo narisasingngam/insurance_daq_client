@@ -17,8 +17,8 @@ export class inputDetails extends Component {
             disabled: false,
             searchDisease: [],
             apiDisease: [],
-            enableInput:false,
-            inputvalue:""
+            inputvalue: "",
+            submitDiseaseValue: ""
         };
         this.searchData = this.searchData.bind(this)
         this.handleInput = this.handleInput.bind(this)
@@ -26,7 +26,6 @@ export class inputDetails extends Component {
 
     searchData() {
         this.setState({ disabled: true })
-        const addDisease = []
 
         axios.post('https://insuranceapii.herokuapp.com/health/cost', { age: this.state.age, rate: this.state.premuim })
             .then(res => {
@@ -36,14 +35,19 @@ export class inputDetails extends Component {
         axios.get('https://insuranceapii.herokuapp.com/disease')
             .then(res => {
                 console.log(res.data);
-                this.setState({apiDisease: res.data})
+                this.setState({ apiDisease: res.data })
+            })
+
+        axios.post('https://insuranceapii.herokuapp.com/health/disease', { age: this.state.age, rate: this.state.premuim, disease: this.state.submitDiseaseValue })
+            .then(res => {
+                console.log(res.data);
             })
 
     }
 
 
     handleInput = (event) => {
-        this.setState({inputvalue: event.target.value})
+        this.setState({ inputvalue: event.target.value })
         const filterValues = (name) => {
             return this.state.apiDisease.filter(data => {
                 return data.symtomp.toLowerCase().indexOf(name.toLowerCase()) > -1;
@@ -56,16 +60,10 @@ export class inputDetails extends Component {
             this.setState({ searchDisease: filterValues(event.target.value) })
         }
 
-        if(this.state.enableInput){
-            event.target.value = "mint"
-            this.setState({enableInput: false});
-        }
-        
-
     }
 
-    clickDisease(symtomp){
-        this.setState({inputvalue: symtomp, searchDisease: []});
+    clickDisease(symtomp) {
+        this.setState({ inputvalue: symtomp, searchDisease: [], submitDiseaseValue: symtomp });
     }
 
     render() {
