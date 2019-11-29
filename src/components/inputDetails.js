@@ -18,7 +18,9 @@ export class inputDetails extends Component {
             searchDisease: [],
             apiDisease: [],
             inputvalue: "",
-            submitDiseaseValue: ""
+            submitDiseaseValue: "",
+            insuranceDetail:[]
+
         };
         this.searchData = this.searchData.bind(this)
         this.handleInput = this.handleInput.bind(this)
@@ -30,6 +32,7 @@ export class inputDetails extends Component {
         axios.post('https://insuranceapii.herokuapp.com/health/cost', { age: this.state.age, rate: this.state.premuim })
             .then(res => {
                 console.log(res.data);
+                this.setState({insuranceDetail: res.data})
             })
 
         axios.get('https://insuranceapii.herokuapp.com/disease')
@@ -106,7 +109,7 @@ export class inputDetails extends Component {
 
                 </div>
                 <div className="table-data">
-                    <Table />
+                    <Table insuranceDetail={this.state.insuranceDetail}/>
                 </div>
 
             </div>
