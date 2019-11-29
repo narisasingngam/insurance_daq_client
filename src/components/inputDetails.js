@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './../styles/input_details.css'
 import Table from './tableView'
 import InputRange from 'react-input-range';
+import axios from 'axios';
 import 'react-input-range/lib/css/index.css'
 // import { DropdownButton, Dropdown, ButtonToolbar } from 'react-bootstrap';
 // import DropdownItem from 'react-bootstrap/DropdownItem';
@@ -14,31 +15,10 @@ export class inputDetails extends Component {
             premuim: 1000,
             age: 0,
             disabled: false,
-            searchDisease:[],
-            apiDisease:[ {
-                "category": "office syndrome",
-                "symtom": "Gastric"
-              },
-              {
-                "category": "office syndrome",
-                "symtom": "Herniated disc"
-              },
-              {
-                "category": "office syndrome",
-                "symtom": "Fever"
-              },
-              {
-                "category": "office syndrome",
-                "symtom": "Sinus"
-              },
-              {
-                "category": "critical disease",
-                "symtom": "Cysts"
-              },
-              {
-                "category": "critical disease",
-                "symtom": "Stroke"
-              }]
+            searchDisease: [],
+            apiDisease: [],
+            enableInput:false,
+            inputvalue:""
         };
         this.searchData = this.searchData.bind(this)
         this.handleInput = this.handleInput.bind(this)
@@ -46,28 +26,51 @@ export class inputDetails extends Component {
 
     searchData() {
         this.setState({ disabled: true })
+        const addDisease = []
+
+        axios.post('https://insuranceapii.herokuapp.com/health/cost', { age: this.state.age, rate: this.state.premuim })
+            .then(res => {
+                console.log(res.data);
+            })
+
+        axios.get('https://insuranceapii.herokuapp.com/disease')
+            .then(res => {
+                console.log(res.data);
+                this.setState({apiDisease: res.data})
+            })
+
     }
 
-    handleInput = (event) =>{
+
+    handleInput = (event) => {
+        this.setState({inputvalue: event.target.value})
         const filterValues = (name) => {
             return this.state.apiDisease.filter(data => {
-                return data.symtom.toLowerCase().indexOf(name.toLowerCase()) > -1;
+                return data.symtomp.toLowerCase().indexOf(name.toLowerCase()) > -1;
             });
         }
 
-        if(event.target.value === "" ){
-            this.setState({searchDisease: []})
-        }else{
-            this.setState({searchDisease: filterValues(event.target.value)})
-        }    
+        if (event.target.value === "") {
+            this.setState({ searchDisease: [] })
+        } else {
+            this.setState({ searchDisease: filterValues(event.target.value) })
+        }
 
+        if(this.state.enableInput){
+            event.target.value = "mint"
+            this.setState({enableInput: false});
+        }
         
+
+    }
+
+    clickDisease(symtomp){
+        this.setState({inputvalue: symtomp, searchDisease: []});
     }
 
     render() {
-        console.log(this.state.searchDisease)
         const items = this.state.searchDisease.map((item, key) =>
-        <button className="disease-btn" key={item.id}>{item.symtom}</button>
+            <button className="disease-btn" key={item.id} onClick={() => this.clickDisease(item.symtomp)}>{item.symtomp}</button>
         )
         return (
             <div className="container">
@@ -97,6 +100,7 @@ export class inputDetails extends Component {
                             className="disease-input"
                             placeholder=" type here "
                             onChange={this.handleInput}
+                            value={this.state.inputvalue}
                         />
                     </div>
                     {items}
