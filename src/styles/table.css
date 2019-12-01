@@ -1,3 +1,8 @@
 .table .thead-dark th{
     background: dimgray !important;
 }
+
+.scroll{
+    height: 500px;
+    overflow: scroll !important;
+}

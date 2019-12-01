@@ -16,7 +16,7 @@ export class tableView extends Component {
             </tr>
         )
         return (
-            <div>
+            <div className="scroll">
                 <table className="table">
                     <thead className="thead-dark">
                         <tr>
