@@ -52,13 +52,11 @@ export class inputDetails extends Component {
             })
             .then(res => this.filterDetail())
         }
-
-        console.log(this.state.submitDiseaseValue)
     }
 
     filterDetail() {
         let detailArray = []
-
+        this.setState({ filteredDetail: [] });
         for (let i = 0; i < this.state.insuranceDetail.length; i++) {
             if (i === 0) detailArray.push(this.state.insuranceDetail[i]);
             else if (this.state.insuranceDetail[i - 1].company_name === this.state.insuranceDetail[i].company_name
@@ -145,7 +143,7 @@ export class inputDetails extends Component {
                 </div>
                 <div className="sub chart-wrapper">
                         <LineChart
-                            insuranceDetail={this.state.insuranceDetail}
+                            insuranceDetail={this.state.filteredDetail}
                     
                         />
                     </div>
