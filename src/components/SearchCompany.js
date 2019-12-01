@@ -8,7 +8,8 @@ export class SearchCompany extends Component {
         super(props)
         this.state = {
             companyList: [],
-            searchCompany: []
+            searchCompany: [],
+            onClickName:""
         }
         this.callCompanyAPI()
     }
@@ -23,6 +24,7 @@ export class SearchCompany extends Component {
     }
 
     handleCompanyInput = (event) => {
+        this.setState({onClickName: event.target.value})
         const filterValues = (name) => {
             return this.state.companyList.filter(data => {
                 return data.company_name.toLowerCase().indexOf(name.toLowerCase()) > -1;
@@ -38,6 +40,7 @@ export class SearchCompany extends Component {
 
     clickCompany(company){
         console.log(company)
+        this.setState({searchCompany:[],onClickName: company})
     }
 
     render() {
@@ -51,6 +54,7 @@ export class SearchCompany extends Component {
                     className="company-input" 
                     placeholder=" type company name here"
                     onChange={this.handleCompanyInput}
+                    value={this.state.onClickName}
                     />
                     <div className="scroll-company">
                     {items}
