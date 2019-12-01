@@ -122,7 +122,9 @@ export class inputDetails extends Component {
                             value={this.state.inputvalue}
                         />
                     </div>
+                    <div className="scroll-btn">
                     {items}
+                    </div>
                     <button className="btn-search" onClick={() => this.searchData()}>Search</button>
 
                 </div>
