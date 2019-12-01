@@ -16,6 +16,7 @@ export class inputDetails extends Component {
             premuim: 1000,
             age: 0,
             disabled: false,
+            disabledOrder: false,
             searchDisease: [],
             apiDisease: [],
             inputvalue: "",
@@ -30,7 +31,8 @@ export class inputDetails extends Component {
     }
 
     searchData() {
-        this.setState({ disabled: true }) 
+        this.setState({ disabled: true })
+        this.setState({ disabledOrder: true }) 
 
         axios.get('https://insuranceapii.herokuapp.com/disease')
             .then(res => {
@@ -56,7 +58,6 @@ export class inputDetails extends Component {
     }
 
     orderData(){
-        this.setState({ disabled: true }) 
 
         if(this.state.submitDiseaseValue !== ""){
             axios.post('https://insuranceapii.herokuapp.com/health/disease/min', { age: this.state.age, rate: this.state.premuim, disease: this.state.submitDiseaseValue })
@@ -129,6 +130,9 @@ export class inputDetails extends Component {
     
 
     handleInput = (event) => {
+        if(event.target.value !== this.state.submitDiseaseValue){
+            this.setState({ disabledOrder: false});
+        }
         this.setState({ inputvalue: event.target.value });
         const filterValues = (name) => {
             return this.state.apiDisease.filter(data => {
@@ -155,7 +159,7 @@ export class inputDetails extends Component {
         return (
             <div className="container">
                 <div className="input-data">
-                    <h3>Filters your insurance rate</h3>
+                    <h3>Filters your insurance details</h3>
 
                     <div className="head-qua">Premium rate</div>
                     <div className="input-range">
@@ -187,7 +191,7 @@ export class inputDetails extends Component {
                         {items}
                     </div>
                     <button className="btn-search" onClick={() => this.searchData()}>Search</button>
-                    <button className="btn-search" style={this.state.disabled ? {} : { display: 'none' }} onClick={() => this.orderData()}>Order</button>
+                    <button className="btn-search" style={this.state.disabledOrder ? {} : { display: 'none' }} onClick={() => this.orderData()}>Order</button>
                 </div>
                 <div className="table-data">
                 <div className="text-center">Premium Rate Chart</div>
