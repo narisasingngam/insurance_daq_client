@@ -5,6 +5,7 @@ import BarChart from './BarChart'
 import InputRange from 'react-input-range';
 import axios from 'axios';
 import 'react-input-range/lib/css/index.css'
+import LineChart from './LineChart';
 // import { DropdownButton, Dropdown, ButtonToolbar } from 'react-bootstrap';
 // import DropdownItem from 'react-bootstrap/DropdownItem';
 
@@ -20,21 +21,15 @@ export class inputDetails extends Component {
             inputvalue: "",
             submitDiseaseValue: "",
             insuranceDetail: [],
-            filteredDetail: []
+            filteredDetail: [],
+            insuranceWithDiseaseDetail: []
         };
         this.searchData = this.searchData.bind(this)
         this.handleInput = this.handleInput.bind(this)
     }
 
     searchData() {
-        this.setState({ disabled: true })
-
-        axios.post('https://insuranceapii.herokuapp.com/health/cost', { age: this.state.age, rate: this.state.premuim })
-            .then(res => {
-                console.log(res.data);
-                this.setState({ insuranceDetail: res.data })
-            })
-            .then(res => this.filterDetail())
+        this.setState({ disabled: true }) 
 
         axios.get('https://insuranceapii.herokuapp.com/disease')
             .then(res => {
@@ -42,16 +37,27 @@ export class inputDetails extends Component {
                 this.setState({ apiDisease: res.data })
             })
 
-        axios.post('https://insuranceapii.herokuapp.com/health/disease', { age: this.state.age, rate: this.state.premuim, disease: this.state.submitDiseaseValue })
+        if(this.state.submitDiseaseValue != ""){
+            axios.post('https://insuranceapii.herokuapp.com/health/disease', { age: this.state.age, rate: this.state.premuim, disease: this.state.submitDiseaseValue })
             .then(res => {
                 console.log(res.data);
+                this.setState({ insuranceDetail: res.data })
             })
+            .then(res => this.filterDetail())
+        }else{
+            axios.post('https://insuranceapii.herokuapp.com/health/cost', { age: this.state.age, rate: this.state.premuim })
+            .then(res => {
+                console.log(res.data);
+                this.setState({ insuranceDetail: res.data })
+            })
+            .then(res => this.filterDetail())
+        }
 
+        console.log(this.state.submitDiseaseValue)
     }
 
     filterDetail() {
         let detailArray = []
-        console.log(this.state.insuranceDetail[1].company_name)
 
         for (let i = 0; i < this.state.insuranceDetail.length; i++) {
             if (i === 0) detailArray.push(this.state.insuranceDetail[i]);
@@ -61,7 +67,6 @@ export class inputDetails extends Component {
             } else {
                 detailArray.push(this.state.insuranceDetail[i]);
             }
-            console.log(this.state.insuranceDetail[i].company_name);
             this.setState({ filteredDetail: detailArray });
         }
 
@@ -76,7 +81,7 @@ export class inputDetails extends Component {
         }
 
         if (event.target.value === "") {
-            this.setState({ searchDisease: [] })
+            this.setState({ searchDisease: [], submitDiseaseValue: "" })
         } else {
             this.setState({ searchDisease: filterValues(event.target.value) })
         }
@@ -138,6 +143,12 @@ export class inputDetails extends Component {
                         />
                     </div>
                 </div>
+                <div className="sub chart-wrapper">
+                        <LineChart
+                            insuranceDetail={this.state.insuranceDetail}
+                    
+                        />
+                    </div>
             </div>
         )
     }

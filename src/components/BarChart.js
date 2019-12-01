@@ -44,7 +44,6 @@ export class BarChart extends Component {
     }
   
     render() {
-      // console.log(this.props.insuranceDetail)
       return <canvas ref={this.chartRef} />;
     }
   }
