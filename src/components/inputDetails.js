@@ -144,7 +144,7 @@ export class inputDetails extends Component {
                         <LineChart
                             insuranceDetail={this.state.insuranceDetail}/>
                     </div>
-                <div className="text-center">Table detail</div>
+                <div className="text-center">Insurance detail</div>
                     <Table insuranceDetail={this.state.insuranceDetail} />
                 </div>
 

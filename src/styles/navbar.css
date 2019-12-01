@@ -8,3 +8,18 @@
     height: 60px;
     margin-left: 20px;
 }
+
+.btn-company{
+    background: coral;
+    border: coral;
+    color: white;
+    font-weight: bold;
+    margin-right: 50px;
+}
+
+.btn-company:hover{
+    color: white;
+    text-decoration:none;
+    -webkit-box-shadow: 0px 0px 5px rgb(156, 89, 11);
+    box-shadow: 0px 0px 5px rgb(156, 89, 11);
+  }
