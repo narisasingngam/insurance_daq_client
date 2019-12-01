@@ -170,7 +170,7 @@ export class inputDetails extends Component {
                             onChange={value => this.setState({ premuim: value, enabledOrder: false})} />
                     </div>
 
-                    <div className="head-qua">Age</div>
+                    <div className="head-qua">Policy period</div>
                     <div className="input-range">
                         <InputRange
                             maxValue={90}
