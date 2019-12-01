@@ -51,8 +51,6 @@ export class inputDetails extends Component {
 
     filterDetail() {
         let detailArray = []
-        console.log(this.state.insuranceDetail[1].company_name)
-
         for (let i = 0; i < this.state.insuranceDetail.length; i++) {
             if (i === 0) detailArray.push(this.state.insuranceDetail[i]);
             else if (this.state.insuranceDetail[i - 1].company_name === this.state.insuranceDetail[i].company_name
@@ -123,21 +121,21 @@ export class inputDetails extends Component {
                         />
                     </div>
                     <div className="scroll-btn">
-                    {items}
+                        {items}
                     </div>
                     <button className="btn-search" onClick={() => this.searchData()}>Search</button>
-
                 </div>
                 <div className="table-data">
-                    <Table insuranceDetail={this.state.insuranceDetail} />
-                </div>
-                <div className="row">
-                    <div className="sub chart-wrapper">
+                <div className="text-center">Chart premium rate</div>
+                <div className="main chart-wrapper">
                         <BarChart
                             insuranceDetail={this.state.filteredDetail}
                         />
-                    </div>
                 </div>
+                <div className="text-center">Table detail</div>
+                    <Table insuranceDetail={this.state.insuranceDetail} />
+                </div>
+
             </div>
         )
     }
