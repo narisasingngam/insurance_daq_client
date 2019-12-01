@@ -1,13 +1,13 @@
 .company-input{
-    margin-left: 250px;
+    margin-left: 330px;
     width:480px;
     display: flex;
   align-items: center;
 }
 
 .company-search{
-    margin-left: 250px;
-    width: 480px;
+    margin-left: 330px;
+    width: 650px;
     color: black;
     border-color: lightgray !important;
     background-color: white !important;
@@ -29,6 +29,10 @@
   }
   .scroll-company{
     overflow: scroll;
-    width: 800px;
+    width: 810px;
     height: 103px;
+}
+
+.table-company{
+    margin-left: 115px;
 }

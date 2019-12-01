@@ -66,8 +66,10 @@ export class SearchCompany extends Component {
                         {items}
                     </div>
                     <div>
+                    <div className="table-company">
                     <div className="text-center">Company Insurance Detail</div>
                     <CompanyTable companyInsuranceDetail={this.state.companyInsuranceDetail} />
+                    </div>
                 </div>
                 </div>
                 
