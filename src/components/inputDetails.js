@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './../styles/input_details.css'
 import Table from './tableView'
+import BarChart from './BarChart'
 import InputRange from 'react-input-range';
 import axios from 'axios';
 import 'react-input-range/lib/css/index.css'
@@ -8,7 +9,6 @@ import 'react-input-range/lib/css/index.css'
 // import DropdownItem from 'react-bootstrap/DropdownItem';
 
 export class inputDetails extends Component {
-
     constructor(props) {
         super(props)
         this.state = {
@@ -19,8 +19,8 @@ export class inputDetails extends Component {
             apiDisease: [],
             inputvalue: "",
             submitDiseaseValue: "",
-            insuranceDetail:[]
-
+            insuranceDetail: [],
+            filteredDetail: []
         };
         this.searchData = this.searchData.bind(this)
         this.handleInput = this.handleInput.bind(this)
@@ -32,8 +32,9 @@ export class inputDetails extends Component {
         axios.post('https://insuranceapii.herokuapp.com/health/cost', { age: this.state.age, rate: this.state.premuim })
             .then(res => {
                 console.log(res.data);
-                this.setState({insuranceDetail: res.data})
+                this.setState({ insuranceDetail: res.data })
             })
+            .then(res => this.filterDetail())
 
         axios.get('https://insuranceapii.herokuapp.com/disease')
             .then(res => {
@@ -48,6 +49,23 @@ export class inputDetails extends Component {
 
     }
 
+    filterDetail() {
+        let detailArray = []
+        console.log(this.state.insuranceDetail[1].company_name)
+
+        for (let i = 0; i < this.state.insuranceDetail.length; i++) {
+            if (i === 0) detailArray.push(this.state.insuranceDetail[i]);
+            else if (this.state.insuranceDetail[i - 1].company_name === this.state.insuranceDetail[i].company_name
+                && this.state.insuranceDetail[i - 1].program_name === this.state.insuranceDetail[i].program_name
+                && this.state.insuranceDetail[i - 1].premium_rate === this.state.insuranceDetail[i].premium_rate) {
+            } else {
+                detailArray.push(this.state.insuranceDetail[i]);
+            }
+            console.log(this.state.insuranceDetail[i].company_name);
+            this.setState({ filteredDetail: detailArray });
+        }
+
+    }
 
     handleInput = (event) => {
         this.setState({ inputvalue: event.target.value })
@@ -109,9 +127,15 @@ export class inputDetails extends Component {
 
                 </div>
                 <div className="table-data">
-                    <Table insuranceDetail={this.state.insuranceDetail}/>
+                    <Table insuranceDetail={this.state.insuranceDetail} />
                 </div>
-
+                <div className="row">
+                    <div className="sub chart-wrapper">
+                        <BarChart
+                            insuranceDetail={this.state.filteredDetail}
+                        />
+                    </div>
+                </div>
             </div>
         )
     }

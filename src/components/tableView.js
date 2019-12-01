@@ -12,7 +12,8 @@ export class tableView extends Component {
                 <th scope="row">{key+1}</th>
                 <td>{item.company_name}</td>
                 <td>{item.program_name}</td>
-                <td>{item.covered_expense}</td>
+                <td>{item.policy_period}</td>
+                <td>{item.premium_rate}</td>
             </tr>
         )
         return (
@@ -23,7 +24,8 @@ export class tableView extends Component {
                             <th scope="col">Id</th>
                             <th scope="col">Company Name</th>
                             <th scope="col">Program</th>
-                            <th scope="col">Covered expenses</th>
+                            <th scope="col">Policy Period</th>
+                            <th scope="col">Premium Rate</th>
                         </tr>
                     </thead>
                     <tbody>
