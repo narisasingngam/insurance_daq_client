@@ -21,8 +21,9 @@ export class inputDetails extends Component {
             inputvalue: "",
             submitDiseaseValue: "",
             insuranceDetail: [],
+            CoverExpenseDetail: [],
             filteredDetail: [],
-            insuranceWithDiseaseDetail: []
+            filteredCoverExpenseDetail: []
         };
         this.searchData = this.searchData.bind(this)
         this.handleInput = this.handleInput.bind(this)
@@ -41,11 +42,31 @@ export class inputDetails extends Component {
             axios.post('https://insuranceapii.herokuapp.com/health/disease', { age: this.state.age, rate: this.state.premuim, disease: this.state.submitDiseaseValue })
             .then(res => {
                 console.log(res.data);
-                this.setState({ insuranceDetail: res.data })
+                this.setState({ insuranceDetail: res.data, CoverExpenseDetail: res.data })
             })
             .then(res => this.filterDetail())
         }else{
             axios.post('https://insuranceapii.herokuapp.com/health/cost', { age: this.state.age, rate: this.state.premuim })
+            .then(res => {
+                console.log(res.data);
+                this.setState({ insuranceDetail: res.data, CoverExpenseDetail: res.data })
+            })
+            .then(res => this.filterDetail())
+        }
+    }
+
+    orderData(){
+        this.setState({ disabled: true }) 
+
+        if(this.state.submitDiseaseValue !== ""){
+            axios.post('https://insuranceapii.herokuapp.com/health/disease/min', { age: this.state.age, rate: this.state.premuim, disease: this.state.submitDiseaseValue })
+            .then(res => {
+                console.log(res.data);
+                this.setState({ insuranceDetail: res.data })
+            })
+            .then(res => this.filterDetail())
+        }else{
+            axios.post('https://insuranceapii.herokuapp.com/health/cost/min', { age: this.state.age, rate: this.state.premuim })
             .then(res => {
                 console.log(res.data);
                 this.setState({ insuranceDetail: res.data })
@@ -53,12 +74,27 @@ export class inputDetails extends Component {
             .then(res => this.filterDetail())
         }
 
-        console.log(this.state.submitDiseaseValue)
+
+        if(this.state.submitDiseaseValue !== ""){
+            axios.post('https://insuranceapii.herokuapp.com/health/disease/min/coverexpense', { age: this.state.age, rate: this.state.premuim, disease: this.state.submitDiseaseValue })
+            .then(res => {
+                console.log(res.data);
+                this.setState({ CoverExpenseDetail: res.data })
+            })
+            .then(res => this.filterCoverExpenseDetail())
+        }else{
+            axios.post('https://insuranceapii.herokuapp.com/health/cost/min/coverexpense', { age: this.state.age, rate: this.state.premuim })
+            .then(res => {
+                console.log(res.data);
+                this.setState({ CoverExpenseDetail: res.data })
+            })
+            .then(res => this.filterCoverExpenseDetail())
+        }
     }
 
     filterDetail() {
         let detailArray = []
-
+        this.setState({ filteredDetail: [] });
         for (let i = 0; i < this.state.insuranceDetail.length; i++) {
             if (i === 0) detailArray.push(this.state.insuranceDetail[i]);
             else if (this.state.insuranceDetail[i - 1].company_name === this.state.insuranceDetail[i].company_name
@@ -72,8 +108,28 @@ export class inputDetails extends Component {
 
     }
 
+    filterCoverExpenseDetail() {
+        let detailArray = []
+        this.setState({ filteredCoverExpenseDetail: [] });
+        for (let i = 0; i < this.state.CoverExpenseDetail.length; i++) {
+            if (i === 0) detailArray.push(this.state.CoverExpenseDetail[i]);
+            else if (this.state.CoverExpenseDetail[i - 1].company_name === this.state.CoverExpenseDetail[i].company_name
+                && this.state.CoverExpenseDetail[i - 1].program_name === this.state.CoverExpenseDetail[i].program_name
+                && this.state.CoverExpenseDetail[i - 1].premium_rate === this.state.CoverExpenseDetail[i].premium_rate) {
+            } else {
+                detailArray.push(this.state.CoverExpenseDetail[i]);
+            }
+            this.setState({ filteredCoverExpenseDetail: detailArray });
+        }
+
+    }
+    
+
+    
+    
+
     handleInput = (event) => {
-        this.setState({ inputvalue: event.target.value })
+        this.setState({ inputvalue: event.target.value });
         const filterValues = (name) => {
             return this.state.apiDisease.filter(data => {
                 return data.symtomp.toLowerCase().indexOf(name.toLowerCase()) > -1;
@@ -81,9 +137,9 @@ export class inputDetails extends Component {
         }
 
         if (event.target.value === "") {
-            this.setState({ searchDisease: [], submitDiseaseValue: "" })
+            this.setState({ searchDisease: [], submitDiseaseValue: "" });
         } else {
-            this.setState({ searchDisease: filterValues(event.target.value) })
+            this.setState({ searchDisease: filterValues(event.target.value) });
         }
 
     }
@@ -131,18 +187,19 @@ export class inputDetails extends Component {
                         {items}
                     </div>
                     <button className="btn-search" onClick={() => this.searchData()}>Search</button>
+                    <button className="btn-search" style={this.state.disabled ? {} : { display: 'none' }} onClick={() => this.orderData()}>Order</button>
                 </div>
                 <div className="table-data">
-                <div className="text-center">Premium rate chart</div>
+                <div className="text-center">Premium Rate Chart</div>
                 <div className="main chart-wrapper">
                         <BarChart
                             insuranceDetail={this.state.filteredDetail}
                         />
                 </div>
-                <div className="text-center">Coverage expense chart</div>
+                <div className="text-center">Coverage Expense Chart</div>
                 <div className="sub chart-wrapper">
                         <LineChart
-                            insuranceDetail={this.state.insuranceDetail}/>
+                            insuranceDetail={this.state.CoverExpenseDetail}/>
                     </div>
                 <div className="text-center">Insurance detail</div>
                     <Table insuranceDetail={this.state.insuranceDetail} />

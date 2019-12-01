@@ -35,7 +35,7 @@ export class BarChart extends Component {
         data: {
           labels: this.props.insuranceDetail.map(d => d.company_name),
           datasets: [{
-            label: 'premium rate',
+            label: 'Premium Rate',
             data: this.props.insuranceDetail.map(item => item.premium_rate),
             backgroundColor: this.getRandomColorEachBar(this.props.insuranceDetail.length),
           }]
