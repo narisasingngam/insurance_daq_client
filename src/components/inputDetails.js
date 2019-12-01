@@ -16,7 +16,7 @@ export class inputDetails extends Component {
             premuim: 1000,
             age: 0,
             disabled: false,
-            disabledOrder: false,
+            enabledOrder: false,
             searchDisease: [],
             apiDisease: [],
             inputvalue: "",
@@ -32,7 +32,7 @@ export class inputDetails extends Component {
 
     searchData() {
         this.setState({ disabled: true })
-        this.setState({ disabledOrder: true }) 
+        this.setState({ enabledOrder: true }) 
 
         axios.get('https://insuranceapii.herokuapp.com/disease')
             .then(res => {
@@ -131,7 +131,7 @@ export class inputDetails extends Component {
 
     handleInput = (event) => {
         if(event.target.value !== this.state.submitDiseaseValue){
-            this.setState({ disabledOrder: false});
+            this.setState({ enabledOrder: false});
         }
         this.setState({ inputvalue: event.target.value });
         const filterValues = (name) => {
@@ -167,7 +167,7 @@ export class inputDetails extends Component {
                             maxValue={100000}
                             minValue={1000}
                             value={this.state.premuim}
-                            onChange={value => this.setState({ premuim: value })} />
+                            onChange={value => this.setState({ premuim: value, enabledOrder: false})} />
                     </div>
 
                     <div className="head-qua">Age</div>
@@ -176,7 +176,7 @@ export class inputDetails extends Component {
                             maxValue={90}
                             minValue={0}
                             value={this.state.age}
-                            onChange={value => this.setState({ age: value })} />
+                            onChange={value => this.setState({ age: value, enabledOrder: false})} />
                     </div>
                     <div className="disease-detail" style={this.state.disabled ? {} : { display: 'none' }}>
                         <div className="head-qua">Coverage disease</div>
@@ -191,7 +191,7 @@ export class inputDetails extends Component {
                         {items}
                     </div>
                     <button className="btn-search" onClick={() => this.searchData()}>Search</button>
-                    <button className="btn-search" style={this.state.disabledOrder ? {} : { display: 'none' }} onClick={() => this.orderData()}>Order</button>
+                    <button className="btn-search" style={this.state.enabledOrder ? {} : { display: 'none' }} onClick={() => this.orderData()}>Order</button>
                 </div>
                 <div className="table-data">
                 <div className="text-center">Premium Rate Chart</div>
