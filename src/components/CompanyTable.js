@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './../styles/table.css'
 
-export class tableView extends Component {
+export class CompanyTable extends Component {
     constructor(props){
         super(props)
     }
@@ -38,4 +38,4 @@ export class tableView extends Component {
     }
 }
 
-export default tableView
+export default CompanyTable
