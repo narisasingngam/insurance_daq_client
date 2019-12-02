@@ -36,3 +36,10 @@
 .table-company{
     margin-left: 115px;
 }
+
+.card-company{
+  display: inline-flex;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  
+}
